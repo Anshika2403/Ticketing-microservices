@@ -3,12 +3,6 @@ import { app } from "../../app";
 import { Ticket } from "../../models/ticket";
 import mongoose from "mongoose";
 
-const buildTicket = async () => {
-  const ticket = Ticket.build({id:new mongoose.Types.ObjectId().toHexString(), title: "test", price: 15 });
-  await ticket.save();
-  return ticket;
-};
-
 it("fetches the order", async () => {
   //Create a ticket
   const ticket = Ticket.build({id:new mongoose.Types.ObjectId().toHexString(), title: "test", price: 15 });
@@ -36,7 +30,7 @@ it("fetches the order", async () => {
 
 it("returns an error if one user tries to fetch another users order", async () => {
   //Create a ticket
-  const ticket = Ticket.build({ title: "test", price: 15 });
+  const ticket = Ticket.build({ id: new mongoose.Types.ObjectId().toHexString(), title: "test", price: 15 });
   await ticket.save();
 
   const user = global.signin();

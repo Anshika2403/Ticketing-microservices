@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  auth:
+    build: ./auth
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./auth/.env
+    depends_on:
+      - mongo
+
+  tickets:
+    build: ./tickets
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./tickets/.env
+    depends_on:
+      - mongo
+
+  orders:
+    build: ./orders
+    ports:
+      - "3002:3002"
+    env_file:
+      - ./orders/.env
+    depends_on:
+      - mongo
+
+  payments:
+    build: ./payments
+    ports:
+      - "3003:3003"
+    env_file:
+      - ./payments/.env
+    depends_on:
+      - mongo
+
+  client:
+    build: ./client
+    ports:
+      - "3005:3000"
+    depends_on:
+      - auth
+      - tickets
+      - orders
+
+volumes:
+  mongo-data:
